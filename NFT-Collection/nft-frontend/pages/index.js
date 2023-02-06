@@ -277,6 +277,10 @@ export default function Home() {
         </div>
         <img className={styles.image} src="/9.svg"></img>
       </div>
+
+      <footer className={styles.footer}>
+        Made with by &#10084; Crypto Devs{" "}
+      </footer>
     </div>
   )
 }

@@ -7,15 +7,14 @@ import "./IWhitelist.sol";
 
 contract CryptoDevs is ERC721Enumerable, Ownable {
     string _baseTokenURI;
-    IWhitelist whitelist;
-
-    bool public presaleStarted;
-    uint256 public presaleEnded;
-    uint256 public maxTokenIds = 20;
-    uint256 public tokenId;
     uint256 public _publicPrice = 0.01 ether;
     uint256 public _presalePrice = 0.005 ether;
     bool public _paused;
+    uint256 public maxTokenIds = 20;
+    uint256 public tokenId;
+    IWhitelist whitelist;
+    bool public presaleStarted;
+    uint256 public presaleEnded;
 
     modifier onlyWhenNotPaused() {
         require(!_paused, "Contract currently paused");

@@ -13,4 +13,6 @@ module.exports = {
       accounts: [PRIVATE_KEY],
     },
   },
+  gas: 2100000,
+  gasPrice: 8000000000,
 };
