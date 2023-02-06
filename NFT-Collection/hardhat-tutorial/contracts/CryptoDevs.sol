@@ -10,7 +10,7 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
     IWhitelist whitelist;
 
     bool public presaleStarted;
-    uint256 public presalended;
+    uint256 public presaleEnded;
     uint256 public maxTokenIds = 20;
     uint256 public tokenId;
     uint256 public _publicPrice = 0.01 ether;
@@ -32,12 +32,12 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
 
     function startPresale() public onlyOwner {
         presaleStarted = true;
-        presalended = block.timestamp + 5 minutes;
+        presaleEnded = block.timestamp + 5 minutes;
     }
 
     function preSaleMint() public payable onlyWhenNotPaused {
         require(
-            presaleStarted && block.timestamp < presalended,
+            presaleStarted && block.timestamp < presaleEnded,
             "Presale ended"
         );
         require(
@@ -53,7 +53,7 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
 
     function mint() public payable onlyWhenNotPaused {
         require(
-            presaleStarted && block.timestamp >= presalended,
+            presaleStarted && block.timestamp >= presaleEnded,
             "Presale has not ended yet"
         );
         require(tokenId < maxTokenIds, "Exceeded the limit");
