@@ -1,4 +1,4 @@
-import { Contract, ethers, providers } from "ethers"
+import { Contract, ethers, providers, utils } from "ethers"
 import Head from "next/head"
 import { useState, useEffect, useRef } from "react"
 import Web3Modal from "web3modal"
@@ -10,7 +10,51 @@ export default function Home() {
   const [presalestarted, setPresalestarted] = useState(false)
   const [presaleEnded, setPresaleEnded] = useState(false)
   const [isOwner, setIsOwner] = useState(false)
+  const [loading, setLoading] = useState(false)
   const web3modalRef = useRef()
+
+  const presaleMint = async () => {
+    try {
+      const signer = await getProviderOrSigner(true)
+      const nftContract = new Contract(
+        NFT_CONTRACT_ADDRESS,
+        NFT_CONTRACT_ABI,
+        signer
+      )
+
+      const txn = await nftContract.preSaleMint({
+        value: utils.parseEther("0.005"),
+      })
+      setLoading(true)
+      await txn.wait()
+      setLoading(false)
+      window.alert("You successfully minted a CryptoDev")
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const publicMint = async () => {
+    try {
+      const signer = await getProviderOrSigner(true)
+      const nftContract = new Contract(
+        NFT_CONTRACT_ADDRESS,
+        NFT_CONTRACT_ABI,
+        signer
+      )
+
+      const txn = await nftContract.Mint({
+        value: utils.parseEther("0.01"),
+      })
+      setLoading(true)
+      await txn.wait()
+      setLoading(false)
+
+      window.alert("You successfully minted a CryptoDev")
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const getOwner = async () => {
     try {
@@ -34,8 +78,10 @@ export default function Home() {
   }
   const connectWallet = async () => {
     try {
+      setLoading(true)
       await getProviderOrSigner()
       setWallectConnected(true)
+      setLoading(false)
     } catch (e) {
       console.log(e)
     }
@@ -73,7 +119,9 @@ export default function Home() {
         signer
       )
       const txn = await nftContract.startPresale()
+      setLoading(true)
       await txn.wait()
+      setLoading(false)
 
       setPresalestarted(true)
     } catch (e) {
@@ -120,6 +168,7 @@ export default function Home() {
 
       const isPresaleStarted = await nftContract.presaleStarted()
       setPresalestarted(isPresaleStarted)
+      console.log(`${isPresaleStarted}`)
 
       return isPresaleStarted
     } catch (e) {
@@ -132,8 +181,9 @@ export default function Home() {
     await connectWallet()
     await getOwner()
     const presaleStarted = await checkIfPresaleStarted()
+    console.log(`${presaleStarted}`)
 
-    if (!presaleEnded) {
+    if (presaleStarted) {
       await checkIfPresaleEnded()
     }
   }
@@ -147,7 +197,7 @@ export default function Home() {
 
       onPageLoad()
     }
-  }, [])
+  }, [presalestarted])
 
   function renderButton() {
     if (!wallectConnected) {
@@ -156,6 +206,9 @@ export default function Home() {
           Connect Wallet
         </button>
       )
+    }
+    if (loading) {
+      return <span className={styles.description}>Loading.....</span>
     }
 
     if (isOwner && !presalestarted) {
@@ -189,7 +242,9 @@ export default function Home() {
             Presale has started! If your address is whitelisted, you can mint a
             CryptoDev
           </span>
-          <button className={styles.button}>Presale Mint</button>
+          <button className={styles.button} onClick={presaleMint}>
+            Presale Mint 🚀
+          </button>
         </div>
       )
     }
@@ -199,7 +254,9 @@ export default function Home() {
         <span className={styles.description}>
           Presale has ended! you can mint a CryptoDev in public sale.
         </span>
-        <button className={styles.button}>Public Mint</button>
+        <button className={styles.button} onClick={publicMint}>
+          Public Mint 🚀
+        </button>
       </div>
     }
   }
@@ -209,7 +266,17 @@ export default function Home() {
       <Head>
         <title>Crypto Devs NFT</title>
       </Head>
-      <div className={styles.main}>{renderButton()}</div>
+      <div className={styles.main}>
+        <div>
+          <h1>Welcome to CryptoDevs NFT</h1>
+          <span className={styles.description}>
+            CryptoDevs NFT is a collection for developers in web3
+          </span>
+
+          {renderButton()}
+        </div>
+        <img className={styles.image} src="/9.svg"></img>
+      </div>
     </div>
   )
 }
