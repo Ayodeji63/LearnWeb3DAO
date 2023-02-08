@@ -7,6 +7,10 @@
   font-family: "Courier New", Courier, monospace;
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
 .footer {
   display: flex;
   padding: 2rem 0;
@@ -34,7 +38,7 @@
 
 .button {
   border-radius: 4px;
-  background-color: blue;
+  background-color: #0000ff;
   border: none;
   color: #ffffff;
   font-size: 15px;

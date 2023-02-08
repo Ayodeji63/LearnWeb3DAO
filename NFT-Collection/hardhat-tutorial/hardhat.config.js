@@ -1,6 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
-
+require("hardhat-deploy");
 /** @type import('hardhat/config').HardhatUserConfig */
 
 const RPC_URL = process.env.RPC_URL;
@@ -13,6 +13,14 @@ module.exports = {
       accounts: [PRIVATE_KEY],
       gas: 2100000,
       gasPrice: 8000000000,
+    },
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+    user: {
+      default: 1,
     },
   },
 };
