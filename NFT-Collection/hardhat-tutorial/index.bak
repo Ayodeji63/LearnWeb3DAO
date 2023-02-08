@@ -34,7 +34,7 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
         presaleEnded = block.timestamp + 5 minutes;
     }
 
-    function presaleMint() public payable onlyWhenNotPaused {
+    function preSaleMint() public payable onlyWhenNotPaused {
         require(
             presaleStarted && block.timestamp < presaleEnded,
             "Presale ended"

@@ -1,11 +1,11 @@
-export const NFT_CONTRACT_ADDRESS = "0x2d329a42c76b72D260F32761515a3cd7eFA2361d"
+export const NFT_CONTRACT_ADDRESS = "0x55b5b1Ee8437cE1866542Ebcb82b94151d99B5f5"
 
-export const NFT_CONTRACT_ABI = [
+export const abi = [
   {
     inputs: [
       {
         internalType: "string",
-        name: "_basetokenURI",
+        name: "baseURI",
         type: "string",
       },
       {
@@ -130,20 +130,7 @@ export const NFT_CONTRACT_ABI = [
   },
   {
     inputs: [],
-    name: "_presalePrice",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "_publicPrice",
+    name: "_price",
     outputs: [
       {
         internalType: "uint256",
@@ -301,13 +288,6 @@ export const NFT_CONTRACT_ABI = [
   },
   {
     inputs: [],
-    name: "preSaleMint",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "presaleEnded",
     outputs: [
       {
@@ -317,6 +297,13 @@ export const NFT_CONTRACT_ABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "presaleMint",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -481,7 +468,7 @@ export const NFT_CONTRACT_ABI = [
   },
   {
     inputs: [],
-    name: "tokenId",
+    name: "tokenIds",
     outputs: [
       {
         internalType: "uint256",
