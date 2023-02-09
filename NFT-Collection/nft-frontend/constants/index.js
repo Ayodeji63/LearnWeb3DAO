@@ -1,11 +1,11 @@
-export const NFT_CONTRACT_ADDRESS = "0xdE04bf905b107D71D0Ce6C527eAC8Ee882db4702"
+export const NFT_CONTRACT_ADDRESS = "0x61B7b83ac35a1aBE87299F6D39DA85199E109090"
 
 export const abi = [
   {
     inputs: [
       {
         internalType: "string",
-        name: "baseURI",
+        name: "_basetokenURI",
         type: "string",
       },
       {

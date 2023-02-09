@@ -28,7 +28,8 @@ export default function Home() {
     try {
       const provider = await getProviderOrSigner()
       const nftContract = new Contract(NFT_CONTRACT_ADDRESS, abi, provider)
-      const numTokenIds = await nftContract.tokenId()
+
+      const numTokenIds = await nftContract.tokenIds()
       setNumTokensMinted(numTokenIds.toString())
       console.log(numTokenIds)
     } catch (e) {
@@ -44,7 +45,7 @@ export default function Home() {
         value: utils.parseEther("0.01"),
       })
       setLoading(true)
-      await txn.wait()
+      await txn.wait(2)
       setLoading(false)
       window.alert("You successfully minted a CryptoDev!")
     } catch (e) {
