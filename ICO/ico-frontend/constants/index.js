@@ -1,0 +1,3 @@
+const ICO_ADDRESS = "0x735d2701c3081a72642F95aFDBE67C91F823F1d4";
+
+module.exports = { ICO_ADDRESS };
