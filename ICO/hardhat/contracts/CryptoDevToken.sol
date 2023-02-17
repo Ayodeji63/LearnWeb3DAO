@@ -7,16 +7,18 @@ import "./ICryptoDevs.sol";
 
 error CryptoDevToken_EthNOTEnough(uint requiredAmount, uint valueSent);
 error CryptoDevToken_SupplyExceeded();
-error CryptoDevToken_BalanceLow();
+error CryptoDevToken_BalanceLow(uint amount);
 error CryptoDevToken_AmountLow();
+error CryptoDevToken_NotSent();
 
 contract CryptoDevToken is ERC20, Ownable {
     ICryptoDevs CryptoDevsNFT;
 
     // State Variable
-    uint public constant TOKEN_PER_NFT = 10 * 10 ** 18;
-    uint public constant TOKEN_PRICE = 0.001 ether;
-    uint public constant MAX_TOTAL_SUPPLY = 1000 * 10 ** 18;
+    uint public constant tokensPerNFT = 10 * 10 ** 18;
+    uint public constant tokenPrice = 0.001 ether;
+    uint public constant maxTotalSupply = 10000 * 10 ** 18;
+
     mapping(uint256 => bool) public tokenIdsClaimed;
 
     constructor(address _cryptoDevsContract) ERC20("CryptoDevToken", "CD") {
@@ -24,13 +26,13 @@ contract CryptoDevToken is ERC20, Ownable {
     }
 
     function mint(uint amount) public payable {
-        uint _requiredAmount = TOKEN_PRICE * amount;
+        uint _requiredAmount = tokenPrice * amount;
         if (msg.value < _requiredAmount) {
             revert CryptoDevToken_EthNOTEnough(_requiredAmount, msg.value);
         }
         uint amountWithDecimals = amount * 10 ** 18;
 
-        if ((totalSupply() + amountWithDecimals) > MAX_TOTAL_SUPPLY) {
+        if ((totalSupply() + amountWithDecimals) > maxTotalSupply) {
             revert CryptoDevToken_SupplyExceeded();
         }
         _mint(msg.sender, amountWithDecimals);
@@ -40,7 +42,7 @@ contract CryptoDevToken is ERC20, Ownable {
         address sender = msg.sender;
         uint balance = CryptoDevsNFT.balanceOf(sender);
         if (balance == 0) {
-            revert CryptoDevToken_BalanceLow();
+            revert CryptoDevToken_BalanceLow(balance);
         }
         uint amount = 0;
 
@@ -55,7 +57,19 @@ contract CryptoDevToken is ERC20, Ownable {
         if (amount == 0) {
             revert CryptoDevToken_AmountLow();
         }
-        _mint(msg.sender, amount * TOKEN_PER_NFT);
+        _mint(msg.sender, amount * tokensPerNFT);
+    }
+
+    function withdraw() public onlyOwner {
+        uint256 amount = address(this).balance;
+        address _owner = owner();
+        if (amount == 0) {
+            revert CryptoDevToken_BalanceLow(amount);
+        }
+        (bool sent, ) = _owner.call{value: amount}("");
+        if (!sent) {
+            revert CryptoDevToken_NotSent();
+        }
     }
 
     receive() external payable {}
