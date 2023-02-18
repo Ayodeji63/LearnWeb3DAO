@@ -27,23 +27,29 @@ contract CryptoDevToken is ERC20, Ownable {
 
     function mint(uint amount) public payable {
         uint _requiredAmount = tokenPrice * amount;
-        if (msg.value < _requiredAmount) {
-            revert CryptoDevToken_EthNOTEnough(_requiredAmount, msg.value);
-        }
+        // if (msg.value < _requiredAmount) {
+        //     revert CryptoDevToken_EthNOTEnough(_requiredAmount, msg.value);
+        // }
+        require(msg.value >= _requiredAmount, "Ether sent is incorrect");
         uint amountWithDecimals = amount * 10 ** 18;
 
-        if ((totalSupply() + amountWithDecimals) > maxTotalSupply) {
-            revert CryptoDevToken_SupplyExceeded();
-        }
+        // if ((totalSupply() + amountWithDecimals) > maxTotalSupply) {
+        //     revert CryptoDevToken_SupplyExceeded();
+        // }
+        require(
+            (totalSupply() + amountWithDecimals) <= maxTotalSupply,
+            "Exceeds the max total supply available."
+        );
         _mint(msg.sender, amountWithDecimals);
     }
 
-    function claim() public {
+    function claim() public payable {
         address sender = msg.sender;
         uint balance = CryptoDevsNFT.balanceOf(sender);
-        if (balance == 0) {
-            revert CryptoDevToken_BalanceLow(balance);
-        }
+        // if (balance == 0) {
+        //     revert CryptoDevToken_BalanceLow(balance);
+        // }
+        require(balance > 0, "You don't own any Crypto Dev NFT");
         uint amount = 0;
 
         for (uint i = 0; i < balance; i++) {
@@ -54,22 +60,33 @@ contract CryptoDevToken is ERC20, Ownable {
             }
         }
 
-        if (amount == 0) {
-            revert CryptoDevToken_AmountLow();
-        }
+        // if (amount == 0) {
+        //     revert CryptoDevToken_AmountLow();
+        // }
+        require(amount > 0, "You have already claimed all the tokens");
+        uint _requiredAmount = tokenPrice * amount;
+        require(msg.value >= _requiredAmount, "Ether sent is incorrect");
         _mint(msg.sender, amount * tokensPerNFT);
     }
 
+    // function withdraw() public onlyOwner {
+    //     uint256 amount = address(this).balance;
+    //     address _owner = owner();
+    //     if (amount == 0) {
+    //         revert CryptoDevToken_BalanceLow(amount);
+    //     }
+    //     (bool sent, ) = _owner.call{value: amount}("");
+    //     if (!sent) {
+    //         revert CryptoDevToken_NotSent();
+    //     }
+    // }
     function withdraw() public onlyOwner {
         uint256 amount = address(this).balance;
+        require(amount > 0, "Nothing to withdraw, contract balance empty");
+
         address _owner = owner();
-        if (amount == 0) {
-            revert CryptoDevToken_BalanceLow(amount);
-        }
         (bool sent, ) = _owner.call{value: amount}("");
-        if (!sent) {
-            revert CryptoDevToken_NotSent();
-        }
+        require(sent, "Failed to send Ether");
     }
 
     receive() external payable {}
