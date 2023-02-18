@@ -46,9 +46,6 @@ contract CryptoDevToken is ERC20, Ownable {
     function claim() public payable {
         address sender = msg.sender;
         uint balance = CryptoDevsNFT.balanceOf(sender);
-        // if (balance == 0) {
-        //     revert CryptoDevToken_BalanceLow(balance);
-        // }
         require(balance > 0, "You don't own any Crypto Dev NFT");
         uint amount = 0;
 
@@ -60,12 +57,8 @@ contract CryptoDevToken is ERC20, Ownable {
             }
         }
 
-        // if (amount == 0) {
-        //     revert CryptoDevToken_AmountLow();
-        // }
         require(amount > 0, "You have already claimed all the tokens");
-        uint _requiredAmount = tokenPrice * amount;
-        require(msg.value >= _requiredAmount, "Ether sent is incorrect");
+
         _mint(msg.sender, amount * tokensPerNFT);
     }
 
