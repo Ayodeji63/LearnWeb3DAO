@@ -19,6 +19,7 @@ export default function Home() {
   const [tokensToBeClaimed, setTokensToBeClaimed] = useState(zero)
   const [tokenAmount, setTokenAmount] = useState(zero)
   const [loading, setLoading] = useState(false)
+  const [isOwner, setIsOwner] = useState(false)
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect()
@@ -74,6 +75,7 @@ export default function Home() {
         TOKEN_CONTRACT_ABI,
         signer
       )
+
       const tx = await tokenContract.claim()
       setLoading(true)
       await tx.wait()
@@ -82,6 +84,7 @@ export default function Home() {
       await getBalanceOfCryptoDevTokens()
       await getTotalTokenMinted()
       await getTokenToBeClaimed()
+      console.log(isOwner)
     } catch (e) {
       console.error(e)
     }
@@ -162,6 +165,46 @@ export default function Home() {
     await getBalanceOfCryptoDevTokens()
     await getTotalTokenMinted()
     await getTokenToBeClaimed()
+    await getOwner()
+  }
+
+  const getOwner = async () => {
+    try {
+      const signer = await getProviderOrSigner(true)
+      const tokenContract = new Contract(
+        TOKEN_CONTRACT_ADDRESS,
+        TOKEN_CONTRACT_ABI,
+        signer
+      )
+      const owner = await tokenContract.owner()
+      console.log(owner)
+      const userAddress = await signer.getAddress()
+      console.log(userAddress)
+      if (owner.toString() == userAddress.toString()) {
+        setIsOwner(true)
+        console.log(isOwner)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const withdraw = async () => {
+    try {
+      const signer = await getProviderOrSigner(true)
+      const tokenContract = new Contract(
+        TOKEN_CONTRACT_ADDRESS,
+        TOKEN_CONTRACT_ABI,
+        signer
+      )
+      const tx = await tokenContract.withdraw()
+      setLoading(true)
+      await tx.wait()
+      setLoading(false)
+      window.alert("You Have Successfully withdraw")
+    } catch (e) {
+      console.error(e)
+    }
   }
   useEffect(() => {
     if (!walletConnected) {
@@ -190,27 +233,30 @@ export default function Home() {
         </div>
       )
     }
-    return (
-      <div style={{ display: "flex-col" }}>
-        <div>
-          <input
-            className={styles.input}
-            type="number"
-            placeholder="Amount of Tokens"
-            value={tokenAmount}
-            onChange={(e) => setTokenAmount(e.target.value)}
-          />
-          <button
-            className={styles.button}
-            disabled={!(tokenAmount > 0)}
-            onClick={() => mintCrpytoDevToken(tokenAmount)}
-          >
-            {" "}
-            Mint Tokens
-          </button>
+
+    if (!isOwner) {
+      return (
+        <div style={{ display: "flex-col" }}>
+          <div>
+            <input
+              className={styles.input}
+              type="number"
+              placeholder="Amount of Tokens"
+              value={tokenAmount}
+              onChange={(e) => setTokenAmount(e.target.value)}
+            />
+            <button
+              className={styles.button}
+              disabled={!(tokenAmount > 0)}
+              onClick={() => mintCrpytoDevToken(tokenAmount)}
+            >
+              {" "}
+              Mint Tokens
+            </button>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 
   return (
@@ -221,7 +267,7 @@ export default function Home() {
       <div className={styles.main}>
         <div>
           <h1 className={styles.title}>Welcome to Crypto Devs ICO</h1>
-          <div>You can claim or mint Crypto Dev Token here</div>
+          {!isOwner && <div>You can claim or mint Crypto Dev Token here</div>}
           {walletConnected ? (
             <div>
               <div className={styles.description}>
@@ -236,6 +282,12 @@ export default function Home() {
           ) : (
             <button className={styles.button} onClick={connectWallet}>
               Connect Your Wallet
+            </button>
+          )}
+
+          {isOwner && (
+            <button className={styles.button} onClick={withdraw}>
+              Withdraw
             </button>
           )}
         </div>

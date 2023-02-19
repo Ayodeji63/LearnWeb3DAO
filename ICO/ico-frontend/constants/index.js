@@ -1,4 +1,4 @@
-const TOKEN_CONTRACT_ADDRESS = "0x735d2701c3081a72642F95aFDBE67C91F823F1d4"
+const TOKEN_CONTRACT_ADDRESS = "0x7F311a52734fF9604Dd3CCBa1C5666598165a7C6"
 
 const TOKEN_CONTRACT_ABI = [
   {
@@ -18,7 +18,13 @@ const TOKEN_CONTRACT_ABI = [
     type: "error",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
     name: "CryptoDevToken_BalanceLow",
     type: "error",
   },
@@ -115,45 +121,6 @@ const TOKEN_CONTRACT_ABI = [
   {
     stateMutability: "payable",
     type: "fallback",
-  },
-  {
-    inputs: [],
-    name: "MAX_TOTAL_SUPPLY",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "TOKEN_PER_NFT",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "TOKEN_PRICE",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
   },
   {
     inputs: [
@@ -291,6 +258,19 @@ const TOKEN_CONTRACT_ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "maxTotalSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -363,6 +343,32 @@ const TOKEN_CONTRACT_ABI = [
         internalType: "bool",
         name: "",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "tokenPrice",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "tokensPerNFT",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -443,6 +449,13 @@ const TOKEN_CONTRACT_ABI = [
       },
     ],
     name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdraw",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
