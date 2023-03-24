@@ -15,10 +15,10 @@ import {
 export const getEtherBalance = async (provider, address, contract = false) => {
   try {
     if (contract) {
-      const balance = await provider.getBalace(EXCHANGE_CONTRACT_ADDRESS);
+      const balance = await provider.getBalance(EXCHANGE_CONTRACT_ADDRESS);
       return balance;
     } else {
-      const balance = await provider.getBalace(address);
+      const balance = await provider.getBalance(address);
       return balance;
     }
   } catch (e) {
@@ -28,7 +28,7 @@ export const getEtherBalance = async (provider, address, contract = false) => {
 };
 
 /**
- * getCDTokensBalance: Retrieves the Crypto Dev tokens in the account ofthe provided `address`
+ * getCDTokensBalance: Retrieves the Crypto Dev tokens in the account of the provided `address`
  */
 
 export const getCDTokensBalance = async (provider, address) => {
@@ -42,6 +42,14 @@ export const getCDTokensBalance = async (provider, address) => {
     return balanceOfCryptoDevTokens;
   } catch (e) {
     console.error(e);
+  }
+  {
+    walletConnected && param.token && (
+      <p>
+        Balance: {param.token.substring(0, 5)}{" "}
+        <span className="text-blue-500 cursor-pointer">Max</span>
+      </p>
+    );
   }
 };
 

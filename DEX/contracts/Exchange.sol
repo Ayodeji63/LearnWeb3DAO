@@ -33,7 +33,7 @@ contract Exchange is ERC20 {
             // `liquidity` provided is equal to `ethBalance` because this is the first time user is adding `ETH` to the contract, so whatever `ETH` contract has is equal to the one supplied by the user in the contract `addLiquidity` call `liquidity` tokens that need to me minted to the user on `addLiquidity` call should always be proportional to the ETH specified by the user
             liquidity = ethBalance;
             _mint(msg.sender, liquidity);
-            // mint is ERC20.sol smart contract function to ming ERC20 tokens
+            // mint is ERC20.sol smart contract function to mint ERC20 tokens
         } else {
             /**
              * If the reserve is not empty, intake any user supplied value for `Ether` and determine according to the ration how many `Cryto Dev` tokens need to be supplied to prevent any large price impacts because of the additional liquidity

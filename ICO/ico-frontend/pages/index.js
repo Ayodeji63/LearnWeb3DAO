@@ -25,8 +25,8 @@ export default function Home() {
     const provider = await web3ModalRef.current.connect()
     const web3Provider = new providers.Web3Provider(provider)
     const { chainId } = await web3Provider.getNetwork()
-    if (chainId != 5) {
-      window.alert("Please switch to goerli network")
+    if (chainId != 11155111) {
+      window.alert("Please switch to sepolia network")
       throw new Error("Incorrect network")
     }
 
@@ -86,7 +86,7 @@ export default function Home() {
       await getTokenToBeClaimed()
       console.log(isOwner)
     } catch (e) {
-      console.error(e)
+      console.error(e.reason)
     }
   }
 
@@ -116,6 +116,7 @@ export default function Home() {
         provider
       )
       const _tokensMinted = await tokenContract.totalSupply()
+      console.log(_tokensMinted)
       setTokenMinted(_tokensMinted)
     } catch (e) {
       console.error(e)
@@ -209,7 +210,7 @@ export default function Home() {
   useEffect(() => {
     if (!walletConnected) {
       web3ModalRef.current = new Web3Modal({
-        network: "goerli",
+        network: "sepolia",
         providerOptions: {},
         disableInjectedProvider: false,
       })
@@ -221,20 +222,20 @@ export default function Home() {
     if (loading) {
       return <button className={styles.button}>Loading..</button>
     }
-    if (tokensToBeClaimed > 0) {
-      return (
-        <div>
-          <div className={styles.description}>
-            {tokensToBeClaimed * 10} Tokens can be claimed
-          </div>
-          <button className={styles.button} onClick={claimToken}>
-            Claim Tokens
-          </button>
-        </div>
-      )
-    }
+    // if (tokensToBeClaimed > 0) {
+    //   return (
+    //     <div>
+    //       <div className={styles.description}>
+    //         {tokensToBeClaimed * 10} Tokens can be claimed
+    //       </div>
+    //       <button className={styles.button} onClick={claimToken}>
+    //         Claim Tokens
+    //       </button>
+    //     </div>
+    //   )
+    // }
 
-    if (!isOwner) {
+    if (isOwner) {
       return (
         <div style={{ display: "flex-col" }}>
           <div>

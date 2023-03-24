@@ -1,4 +1,4 @@
-const TOKEN_CONTRACT_ADDRESS = "0x7F311a52734fF9604Dd3CCBa1C5666598165a7C6"
+const TOKEN_CONTRACT_ADDRESS = "0x3E5789040ce4b7B4a35e8f7CDE28CaF55A1c4E8e"
 
 const TOKEN_CONTRACT_ABI = [
   {
@@ -11,43 +11,6 @@ const TOKEN_CONTRACT_ABI = [
     ],
     stateMutability: "nonpayable",
     type: "constructor",
-  },
-  {
-    inputs: [],
-    name: "CryptoDevToken_AmountLow",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "CryptoDevToken_BalanceLow",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "requiredAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "valueSent",
-        type: "uint256",
-      },
-    ],
-    name: "CryptoDevToken_EthNOTEnough",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "CryptoDevToken_SupplyExceeded",
-    type: "error",
   },
   {
     anonymous: false,
@@ -193,7 +156,7 @@ const TOKEN_CONTRACT_ABI = [
     inputs: [],
     name: "claim",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -466,7 +429,8 @@ const TOKEN_CONTRACT_ABI = [
   },
 ]
 
-const NFT_CONTRACT_ADDRESS = "0x259844eb5eeb47e3497c06685e049e6d729900b2"
+const NFT_CONTRACT_ADDRESS = "0xBe1B1D3c32D318De4fdcE9F65e3cB4C941Ad0299"
+// "0x259844eb5eeb47e3497c06685e049e6d729900b2"
 const NFT_CONTRACT_ABI = [
   {
     inputs: [

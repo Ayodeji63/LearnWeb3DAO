@@ -147,8 +147,8 @@ export default function Home() {
 
     // If the user is not connected to goerli, tell them to switch to goerli
     const { chainId } = await web3Provider.getNetwork()
-    if (chainId != 5) {
-      window.alert("Please switcht to goerli network")
+    if (chainId != 11155111) {
+      window.alert("Please switcht to sepolia network")
       throw new Error("Incorrect network")
     }
 
@@ -185,7 +185,7 @@ export default function Home() {
   useEffect(() => {
     if (!walletConnected) {
       web3ModalRef.current = new Web3Modal({
-        network: "goerli",
+        network: "sepolia",
         providerOptions: {},
         disableInjectedProvider: false,
       })

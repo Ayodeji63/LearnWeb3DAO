@@ -16,7 +16,7 @@ contract CryptoDevToken is ERC20, Ownable {
 
     // State Variable
     uint public constant tokensPerNFT = 10 * 10 ** 18;
-    uint public constant tokenPrice = 0.001 ether;
+    uint public constant tokenPrice = 0.0001 ether;
     uint public constant maxTotalSupply = 10000 * 10 ** 18;
 
     mapping(uint256 => bool) public tokenIdsClaimed;
